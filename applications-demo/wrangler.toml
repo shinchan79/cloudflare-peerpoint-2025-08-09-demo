@@ -1,0 +1,35 @@
+name = "codecollab-live"
+main = "src/worker/index.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Variables
+[vars]
+ENVIRONMENT = "development"
+OPENAI_API_KEY = "your-openai-api-key"
+
+# AI Models
+[ai]
+binding = "AI"
+
+# Local development - comment out cloud resources
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "codecollab-db"
+# database_id = "8bc69cc6-a2ee-40d8-bb46-cadb7ed006ce"
+
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "8190fc51469149a28a65a14930c19c18"
+
+# [[r2_buckets]]
+# binding = "ASSETS"
+# bucket_name = "codecollab-assets"
+
+# [[durable_objects.bindings]]
+# name = "COLLABORATION"
+# class_name = "CollaborationRoom"
+
+# [[migrations]]
+# tag = "v1"
+# new_classes = ["CollaborationRoom"] 
