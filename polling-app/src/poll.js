@@ -5,6 +5,20 @@ export class Poll {
     this.sessions = new Map();
     this.votes = new Map();
     this.pollData = null;
+    
+    // Load data from storage
+    this.state.blockConcurrencyWhile(async () => {
+      const storedPollData = await this.state.storage.get('pollData');
+      const storedVotes = await this.state.storage.get('votes');
+      
+      if (storedPollData) {
+        this.pollData = storedPollData;
+      }
+      
+      if (storedVotes) {
+        this.votes = new Map(Object.entries(storedVotes));
+      }
+    });
   }
 
   async fetch(request) {
@@ -40,6 +54,10 @@ export class Poll {
       this.votes.set(option, 0);
     });
 
+    // Persist to state
+    await this.state.storage.put('pollData', this.pollData);
+    await this.state.storage.put('votes', Object.fromEntries(this.votes));
+
     return new Response(JSON.stringify({ success: true }), {
       headers: { "Content-Type": "application/json" }
     });
@@ -58,6 +76,9 @@ export class Poll {
 
     // Increment vote count
     this.votes.set(option, this.votes.get(option) + 1);
+    
+    // Persist votes to storage
+    await this.state.storage.put('votes', Object.fromEntries(this.votes));
     
     // Broadcast update to all connected clients
     this.broadcast({

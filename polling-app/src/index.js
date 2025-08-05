@@ -23,7 +23,7 @@ export default {
       return serveStaticFile("/public/index.html", env);
     }
     
-    if (path.startsWith("/public/")) {
+    if (path.startsWith("/public/") || path.startsWith("/styles.css") || path.startsWith("/app.js")) {
       return serveStaticFile(path, env);
     }
 
