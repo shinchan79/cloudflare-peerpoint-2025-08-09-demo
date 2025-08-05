@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗳️ Real-time Polling App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗳️ Real-time Polling</h1>
+            <p>Create and vote on polls with live updates and beautiful charts!</p>
+        </div>
+
+        <div class="content">
+            <!-- Create Poll Form -->
+            <div id="createForm">
+                <h2>Create a New Poll</h2>
+                <form id="pollForm">
+                    <div class="form-group">
+                        <label for="question">Question:</label>
+                        <textarea id="question" rows="3" placeholder="What would you like to ask?" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Options:</label>
+                        <div id="optionsContainer">
+                            <input type="text" class="option-input" placeholder="Option 1" required>
+                            <input type="text" class="option-input" placeholder="Option 2" required>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addOption()" style="margin-top: 10px;">+ Add Option</button>
+                    </div>
+
+                    <button type="submit" class="btn">Create Poll</button>
+                </form>
+            </div>
+
+            <!-- Poll Display -->
+            <div id="pollDisplay" class="hidden">
+                <div class="poll-display">
+                    <div class="poll-question" id="pollQuestion"></div>
+                    
+                    <!-- Voting Section -->
+                    <div class="voting-section">
+                        <h3>Cast Your Vote</h3>
+                        <div id="pollOptions"></div>
+                    </div>
+
+                    <!-- Statistics Section -->
+                    <div class="stats-section">
+                        <h3>Live Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stats-card">
+                                <div class="stats-number" id="totalVotes">0</div>
+                                <div class="stats-label">Total Votes</div>
+                            </div>
+                            <div class="stats-card">
+                                <div class="stats-number" id="activeUsers">0</div>
+                                <div class="stats-label">Active Users</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart Section -->
+                    <div class="chart-section">
+                        <h3>Results Visualization</h3>
+                        <div class="chart-container">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Share Section -->
+                    <div class="share-section">
+                        <h3>Share This Poll</h3>
+                        <div class="share-buttons">
+                            <button class="btn btn-share" onclick="copyPollLink()">
+                                📋 Copy Link
+                            </button>
+                            <button class="btn btn-share" onclick="shareOnTwitter()">
+                                🐦 Share on Twitter
+                            </button>
+                        </div>
+                        <div class="poll-link" id="pollLink"></div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" onclick="showCreateForm()" style="margin-top: 20px;">Create Another Poll</button>
+            </div>
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Loading poll...</p>
+            </div>
+
+            <div id="error" class="error hidden"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 

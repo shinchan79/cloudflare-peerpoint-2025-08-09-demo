@@ -1,0 +1,33 @@
+{
+  "name": "polling-app",
+  "version": "1.0.0",
+  "description": "Real-time polling app built with Cloudflare Workers, Durable Objects and KV Storage",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev --local --persist",
+    "deploy": "wrangler deploy",
+    "deploy:preview": "wrangler deploy --env preview",
+    "tail": "wrangler tail",
+    "kv:list": "wrangler kv:key list --binding=POLLS_KV",
+    "kv:put": "wrangler kv:key put --binding=POLLS_KV",
+    "kv:delete": "wrangler kv:key delete --binding=POLLS_KV"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "durable-objects",
+    "kv-storage",
+    "websocket",
+    "real-time",
+    "polling",
+    "voting"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,23 @@
+name = "polling-app"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[durable_objects]
+bindings = [
+  { name = "POLL", class_name = "Poll" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["Poll"]
+
+[[kv_namespaces]]
+binding = "POLLS_KV"
+id = "f38172869f1944bab3ca71102826a328"
+preview_id = "6a27efa4ca5c4470970760df492fdb3e"
+
+[env.production]
+name = "polling-app"
+
+[env.preview]
+name = "polling-app-preview" 
