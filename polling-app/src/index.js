@@ -23,7 +23,15 @@ export default {
       return serveStaticFile("/public/index.html", env);
     }
     
-    if (path.startsWith("/public/") || path.startsWith("/styles.css") || path.startsWith("/app.js")) {
+    if (path === "/styles.css") {
+      return serveStaticFile("/public/styles.css", env);
+    }
+    
+    if (path === "/app.js") {
+      return serveStaticFile("/public/app.js", env);
+    }
+    
+    if (path.startsWith("/public/")) {
       return serveStaticFile(path, env);
     }
 
@@ -114,7 +122,7 @@ async function handleWebSocket(request, env, path) {
 
 async function serveStaticFile(path, env) {
   // Serve static files from public directory
-  const filePath = path.replace('/public/', '');
+  let filePath = path.replace('/public/', '');
   
   // Define static files
   const staticFiles = {

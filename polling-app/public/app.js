@@ -4,6 +4,22 @@ let websocket = null;
 let resultsChart = null;
 let activeUsers = 0;
 
+// Debug function
+function debugLog(message) {
+    console.log('[DEBUG]', message);
+    // Also show on page
+    const debugDiv = document.getElementById('debug') || createDebugDiv();
+    debugDiv.innerHTML += '<br>' + message;
+}
+
+function createDebugDiv() {
+    const div = document.createElement('div');
+    div.id = 'debug';
+    div.style.cssText = 'position:fixed;top:10px;right:10px;background:black;color:white;padding:10px;z-index:9999;max-width:300px;font-size:12px;';
+    document.body.appendChild(div);
+    return div;
+}
+
 // Generate a random poll ID
 function generatePollId() {
     return 'poll_' + Math.random().toString(36).substr(2, 9);
@@ -61,6 +77,7 @@ document.getElementById('pollForm').addEventListener('submit', async (e) => {
         });
 
         if (response.ok) {
+            console.log('Poll created successfully, loading poll...');
             loadPoll(pollId);
         } else {
             throw new Error('Failed to create poll');
@@ -81,6 +98,7 @@ async function loadPoll(pollId) {
             throw new Error(poll.error);
         }
 
+        console.log('Poll loaded, displaying...');
         displayPoll(poll);
         connectWebSocket(pollId);
         updatePollLink(pollId);
@@ -108,18 +126,28 @@ function displayPoll(poll) {
         optionDiv.className = 'option-item fade-in';
         optionDiv.innerHTML = `
             <div class="option-text">${option}</div>
-            <button class="vote-btn" onclick="vote('${option}')">Vote</button>
+            <button class="vote-btn" data-option="${option}">Vote</button>
             <div class="vote-count">${votes} votes</div>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: ${percentage}%"></div>
             </div>
         `;
+        
+        // Add event listener to vote button
+        const voteBtn = optionDiv.querySelector('.vote-btn');
+        voteBtn.addEventListener('click', function() {
+            const option = this.getAttribute('data-option');
+            debugLog('Vote button clicked for option: ' + option);
+            vote(option);
+        });
+        
         optionsContainer.appendChild(optionDiv);
     });
 
     updateStatistics(poll.votes, total);
     createChart(poll.options, poll.votes);
     
+    console.log('Displaying poll with options:', poll.options);
     document.getElementById('createForm').classList.add('hidden');
     document.getElementById('pollDisplay').classList.remove('hidden');
 }
@@ -127,15 +155,24 @@ function displayPoll(poll) {
 // Vote
 async function vote(option) {
     try {
+        debugLog('Voting for: ' + option + ' Poll ID: ' + currentPollId);
+        
         const response = await fetch('/api/vote?pollId=' + currentPollId, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ option })
         });
 
+        debugLog('Vote response: ' + response.status);
+
         if (!response.ok) {
-            throw new Error('Failed to vote');
+            const errorText = await response.text();
+            debugLog('Vote error: ' + errorText);
+            throw new Error('Failed to vote: ' + response.status);
         }
+
+        const result = await response.json();
+        debugLog('Vote success: ' + JSON.stringify(result));
 
         // Add visual feedback
         const voteBtn = event.target;
@@ -148,6 +185,7 @@ async function vote(option) {
         }, 1000);
 
     } catch (error) {
+        debugLog('Vote error: ' + error.message);
         showError('Failed to vote: ' + error.message);
     }
 }
@@ -352,12 +390,16 @@ function hideError() {
 
 // Check if URL has poll ID
 window.addEventListener('load', function() {
+    debugLog('Page loaded, checking for poll ID...');
     const urlParams = new URLSearchParams(window.location.search);
     const pollId = urlParams.get('poll');
     
     if (pollId) {
+        debugLog('Found poll ID in URL: ' + pollId);
         currentPollId = pollId;
         loadPoll(pollId);
+    } else {
+        debugLog('No poll ID in URL, ready to create new poll');
     }
 });
 
