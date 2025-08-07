@@ -4,18 +4,18 @@
 
 ## Mục lục
 
-- [🎯 Tính năng chính](#-tính-năng-chính)
-- [🏗️ Kiến trúc hệ thống](#️-kiến-trúc-hệ-thống)
-- [🔧 Công nghệ sử dụng](#-công-nghệ-sử-dụng)
-- [📁 Cấu trúc code](#-cấu-trúc-code)
-- [🚀 Hướng dẫn deploy từ scratch](#-hướng-dẫn-deploy-từ-scratch)
-- [🔍 Giải thích chi tiết code](#-giải-thích-chi-tiết-code)
-- [📈 Hướng dẫn mở rộng](#-hướng-dẫn-mở-rộng)
-- [🐛 Troubleshooting](#-troubleshooting)
+- [Tính năng chính](#-tính-năng-chính)
+- [Kiến trúc hệ thống](#️-kiến-trúc-hệ-thống)
+- [Công nghệ sử dụng](#-công-nghệ-sử-dụng)
+- [Cấu trúc code](#-cấu-trúc-code)
+- [Hướng dẫn deploy từ scratch](#-hướng-dẫn-deploy-từ-scratch)
+- [Giải thích chi tiết code](#-giải-thích-chi-tiết-code)
+- [Hướng dẫn mở rộng](#-hướng-dẫn-mở-rộng)
+- [Troubleshooting](#-troubleshooting)
 
 ---
 
-## 🎯 Tính năng chính
+## Tính năng chính
 
 - ✅ **Tạo poll** với câu hỏi và nhiều lựa chọn
 - ✅ **Multi-vote support**
@@ -26,7 +26,7 @@
 
 ---
 
-## 🏗️ Kiến trúc hệ thống
+## Kiến trúc hệ thống
 
 ### **Tổng quan kiến trúc:**
 
@@ -60,7 +60,7 @@
 
 ---
 
-## 🔧 Công nghệ sử dụng
+## Công nghệ sử dụng
 
 ### **Cloudflare Stack:**
 
@@ -97,7 +97,7 @@ polling-app/
 
 ---
 
-## 🚀 Hướng dẫn deploy từ scratch
+## Hướng dẫn deploy từ scratch
 
 ### **Bước 1: Setup môi trường**
 
@@ -323,7 +323,7 @@ function connectWebSocket(pollId) {
 
 ---
 
-## 📈 Hướng dẫn mở rộng
+## Hướng dẫn mở rộng
 
 ### **1. Thêm Authentication**
 
@@ -564,15 +564,9 @@ const corsHeaders = {
 
 ---
 
-## 📚 Resources
+## Reference resources
 
 - [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
 - [Durable Objects Guide](https://developers.cloudflare.com/durable-objects/)
 - [KV Storage API](https://developers.cloudflare.com/kv/)
 - [WebSocket API](https://developers.cloudflare.com/workers/runtime-apis/websockets/)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
