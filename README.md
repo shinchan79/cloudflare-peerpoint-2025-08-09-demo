@@ -109,7 +109,7 @@ node --version
 npm install -g wrangler
 
 # 3. Login vào Cloudflare
-wrangler login
+npx wrangler login
 ```
 
 ### **Bước 2: Tạo project**
