@@ -1,8 +1,14 @@
-/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+* {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 body {
@@ -13,7 +19,6 @@ body {
     line-height: 1.6;
 }
 
-/* Container */
 .container {
     max-width: 1000px;
     margin: 0 auto;
@@ -35,7 +40,6 @@ body {
     }
 }
 
-/* Header */
 .header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -80,7 +84,6 @@ body {
     padding: 40px;
 }
 
-/* Form Styles */
 .form-group {
     margin-bottom: 25px;
 }
@@ -121,7 +124,6 @@ input:focus, textarea:focus {
     min-width: 200px;
 }
 
-/* Buttons */
 .btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -157,7 +159,6 @@ input:focus, textarea:focus {
     font-size: 14px;
 }
 
-/* Poll Display */
 .poll-display {
     margin-top: 30px;
 }
@@ -170,7 +171,6 @@ input:focus, textarea:focus {
     font-weight: 700;
 }
 
-/* Voting Section */
 .voting-section {
     margin-bottom: 40px;
     padding: 30px;
@@ -202,11 +202,63 @@ input:focus, textarea:focus {
     border-color: #667eea;
 }
 
+.option-item.user-voted {
+    border: 2px solid #28a745 !important;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%) !important;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2) !important;
+    position: relative;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.option-item[style*="border: 2px solid #28a745"] {
+    border: 2px solid #28a745 !important;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%) !important;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2) !important;
+}
+
+.option-item.user-voted::before {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #28a745;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.option-item.user-voted:hover {
+    border-color: #20c997;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+}
+
 .option-text {
     flex: 1;
     font-size: 1.2em;
     font-weight: 500;
     color: #333;
+}
+
+.option-item.user-voted .option-text {
+    font-weight: 700 !important;
+    color: #155724 !important;
+    text-shadow: 0 1px 2px rgba(21, 87, 36, 0.1) !important;
 }
 
 .vote-btn {
@@ -226,6 +278,24 @@ input:focus, textarea:focus {
     box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
 }
 
+.unvote-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.unvote-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+}
+
 .vote-count {
     background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     color: white;
@@ -235,6 +305,19 @@ input:focus, textarea:focus {
     margin-left: 15px;
     min-width: 80px;
     text-align: center;
+}
+
+/* User voted count style - Enhanced for better visibility */
+.option-item.user-voted .vote-count {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    border: 1px solid #20c997;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 .progress-bar {
@@ -253,7 +336,18 @@ input:focus, textarea:focus {
     border-radius: 5px;
 }
 
-/* Statistics Section */
+.option-item.user-voted .progress-fill {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    animation: shimmer 2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+}
+
+@keyframes shimmer {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
 .stats-section {
     margin-bottom: 40px;
     padding: 30px;
@@ -322,7 +416,6 @@ input:focus, textarea:focus {
     margin: 20px 0;
 }
 
-/* Share Section */
 .share-section {
     margin-bottom: 30px;
     padding: 30px;
@@ -375,7 +468,6 @@ input:focus, textarea:focus {
     100% { transform: rotate(360deg); }
 }
 
-/* Error */
 .error {
     background: #f8d7da;
     color: #721c24;
@@ -385,12 +477,21 @@ input:focus, textarea:focus {
     border: 1px solid #f5c6cb;
 }
 
-/* Utility Classes */
 .hidden {
     display: none;
 }
 
-/* Responsive Design */
+@media (hover: none) and (pointer: coarse) {
+    .vote-btn, .unvote-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .option-item {
+        min-height: 60px;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         margin: 10px;
@@ -420,10 +521,19 @@ input:focus, textarea:focus {
     .option-item {
         flex-direction: column;
         text-align: center;
+        position: relative;
     }
     
-    .vote-btn, .vote-count {
+    .vote-btn, .unvote-btn, .vote-count {
         margin: 10px 0 0 0;
+    }
+
+    .option-item.user-voted::before {
+        top: 5px;
+        right: 5px;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
     }
     
     .stats-grid {
@@ -461,16 +571,27 @@ input:focus, textarea:focus {
     .option-text {
         font-size: 1.1em;
     }
+    
+    .vote-btn, .unvote-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
 }
 
-/* Animations */
 .fade-in {
     animation: fadeIn 0.5s ease-in;
+    will-change: opacity, transform;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { 
+        opacity: 0; 
+        transform: translateY(10px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0);
+    }
 }
 
 .slide-up {
@@ -488,7 +609,6 @@ input:focus, textarea:focus {
     }
 }
 
-/* Success/Error States */
 .success {
     border-color: #28a745;
     background-color: #d4edda;
@@ -499,11 +619,21 @@ input:focus, textarea:focus {
     background-color: #f8d7da;
 }
 
-/* Hover Effects */
 .option-item:hover .vote-btn {
     background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+    transform: scale(1.05);
+}
+
+.option-item:hover .unvote-btn {
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+    transform: scale(1.05);
+}
+
+.option-item.user-voted:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(40, 167, 69, 0.4);
 }
 
 .stats-card:hover .stats-number {
     color: #764ba2;
-} 
+}

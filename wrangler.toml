@@ -11,13 +11,14 @@ bindings = [
 tag = "v1"
 new_classes = ["Poll"]
 
+# Thay ID này bằng ID thực từ output của wrangler kv namespace create
 [[kv_namespaces]]
 binding = "POLLS_KV"
-id = "f38172869f1944bab3ca71102826a328"
-preview_id = "6a27efa4ca5c4470970760df492fdb3e"
+id = "646885645fe84edc83137e1f25584f9e"
+preview_id = "dbbad7a443af44fba6832b67002e48c2"
 
 [env.production]
 name = "polling-app"
 
 [env.preview]
-name = "polling-app-preview" 
+name = "polling-app-preview"
