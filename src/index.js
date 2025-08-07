@@ -74,8 +74,6 @@ async function handleAPI(request, env, path) {
       const createData = await request.json();
       createData.id = pollId;
       
-      console.log('Creating poll with data:', createData);
-      
       // Store poll metadata in KV
       await env.POLLS_KV.put(pollId, JSON.stringify({
         question: createData.question,
@@ -105,7 +103,6 @@ async function handleAPI(request, env, path) {
       }
       
       const voteData = await request.json();
-      console.log('Vote request:', voteData);
       
       const voteResponse = await pollObj.fetch(new Request(`${url.origin}/vote`, {
         method: "POST",
@@ -113,7 +110,6 @@ async function handleAPI(request, env, path) {
         body: JSON.stringify(voteData)
       }));
 
-      // Add CORS headers to response
       const voteResponseData = await voteResponse.text();
       return new Response(voteResponseData, {
         status: voteResponse.status,
@@ -124,10 +120,8 @@ async function handleAPI(request, env, path) {
       });
 
     case "/api/get":
-      console.log('Getting poll data for ID:', pollId);
       const getResponse = await pollObj.fetch(new Request(`${url.origin}/get`));
-      
-      // Add CORS headers to response
+
       const getResponseData = await getResponse.text();
       return new Response(getResponseData, {
         status: getResponse.status,
@@ -206,7 +200,6 @@ function getIndexHTML() {
         </div>
 
         <div class="content">
-            <!-- Create Poll Form -->
             <div id="createForm">
                 <h2>Create a New Poll</h2>
                 <form id="pollForm">
@@ -227,8 +220,6 @@ function getIndexHTML() {
                     <button type="submit" class="btn">Create Poll</button>
                 </form>
             </div>
-
-            <!-- Poll Display -->
             <div id="pollDisplay" class="hidden">
                 <div class="poll-display">
                     <div class="poll-question" id="pollQuestion"></div>
@@ -238,8 +229,6 @@ function getIndexHTML() {
                         <h3>Cast Your Vote</h3>
                         <div id="pollOptions"></div>
                     </div>
-
-                    <!-- Statistics Section -->
                     <div class="stats-section">
                         <h3>Live Statistics</h3>
                         <div class="stats-grid">
@@ -253,16 +242,12 @@ function getIndexHTML() {
                             </div>
                         </div>
                     </div>
-
-                    <!-- Chart Section -->
                     <div class="chart-section">
                         <h3>Results Visualization</h3>
                         <div class="chart-container">
                             <canvas id="resultsChart"></canvas>
                         </div>
                     </div>
-
-                    <!-- Share Section -->
                     <div class="share-section">
                         <h3>Share This Poll</h3>
                         <div class="share-buttons">
@@ -310,7 +295,6 @@ body {
     line-height: 1.6;
 }
 
-/* Container */
 .container {
     max-width: 1000px;
     margin: 0 auto;
@@ -332,7 +316,6 @@ body {
     }
 }
 
-/* Header */
 .header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -372,12 +355,10 @@ body {
     z-index: 1;
 }
 
-/* Content */
 .content {
     padding: 40px;
 }
 
-/* Form Styles */
 .form-group {
     margin-bottom: 25px;
 }
@@ -412,7 +393,6 @@ input:focus, textarea:focus {
     margin-bottom: 10px;
 }
 
-/* Buttons */
 .btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -448,7 +428,6 @@ input:focus, textarea:focus {
     font-size: 14px;
 }
 
-/* Poll Display */
 .poll-display {
     margin-top: 30px;
 }
@@ -461,7 +440,6 @@ input:focus, textarea:focus {
     font-weight: 700;
 }
 
-/* Voting Section */
 .voting-section {
     margin-bottom: 40px;
     padding: 30px;
@@ -544,7 +522,6 @@ input:focus, textarea:focus {
     border-radius: 5px;
 }
 
-/* Statistics Section */
 .stats-section {
     margin-bottom: 40px;
     padding: 30px;
@@ -591,7 +568,6 @@ input:focus, textarea:focus {
     font-weight: 500;
 }
 
-/* Chart Section */
 .chart-section {
     margin-bottom: 40px;
     padding: 30px;
@@ -613,7 +589,6 @@ input:focus, textarea:focus {
     margin: 20px 0;
 }
 
-/* Share Section */
 .share-section {
     margin-bottom: 30px;
     padding: 30px;
@@ -644,7 +619,6 @@ input:focus, textarea:focus {
     border: 2px solid #e1e5e9;
 }
 
-/* Loading */
 .loading {
     text-align: center;
     padding: 60px;
@@ -666,7 +640,6 @@ input:focus, textarea:focus {
     100% { transform: rotate(360deg); }
 }
 
-/* Error */
 .error {
     background: #f8d7da;
     color: #721c24;
@@ -676,12 +649,10 @@ input:focus, textarea:focus {
     border: 1px solid #f5c6cb;
 }
 
-/* Utility Classes */
 .hidden {
     display: none;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .container {
         margin: 10px;
@@ -750,7 +721,6 @@ input:focus, textarea:focus {
     }
 }
 
-/* Animations */
 .fade-in {
     animation: fadeIn 0.5s ease-in;
 }
@@ -777,39 +747,31 @@ input:focus, textarea:focus {
 }
 
 function getAppJS() {
-    return `// Real-time Polling App JavaScript with Multi-Vote Support - COMPLETE FIXED VERSION
+    return `
   let currentPollId = null;
   let websocket = null;
   let resultsChart = null;
   let activeUsers = 0;
-  let userCurrentVotes = []; // Track user's current votes as array
-  
-  // FIXED: Generate unique user ID for each tab/session
+  let userCurrentVotes = [];
+
   function generateUserId() {
       const timestamp = Date.now();
       const random = Math.random().toString(36).substr(2, 12);
       const tabRandom = Math.floor(Math.random() * 999999);
       const sessionId = \`user_\${timestamp}_\${random}_\${tabRandom}\`;
-      
-      console.log('🆔 Generated UNIQUE user ID:', sessionId);
       return sessionId;
   }
-  
-  // Initialize user ID immediately when script loads
+
   const currentUserId = generateUserId();
-  console.log('🚀 Current User ID:', currentUserId);
-  
-  // Debug function
+
   function debugLog(message) {
       console.log('[DEBUG]', message);
   }
-  
-  // Generate a random poll ID
+
   function generatePollId() {
       return 'poll_' + Math.random().toString(36).substr(2, 9);
   }
-  
-  // Add option input
+
   function addOption() {
       const container = document.getElementById('optionsContainer');
       const input = document.createElement('input');
@@ -819,8 +781,7 @@ function getAppJS() {
       input.required = true;
       container.appendChild(input);
   }
-  
-  // Show create form
+
   function showCreateForm() {
       document.getElementById('createForm').classList.remove('hidden');
       document.getElementById('pollDisplay').classList.add('hidden');
@@ -835,12 +796,10 @@ function getAppJS() {
       }
       userCurrentVotes = [];
   }
-  
-  // Initialize app
+
   document.addEventListener('DOMContentLoaded', function() {
       debugLog('🚀 App initialized with User ID: ' + currentUserId);
-      
-      // Show user ID in UI for debugging
+
       showUserInfo();
       
       document.getElementById('pollForm').addEventListener('submit', async (e) => {
@@ -868,7 +827,6 @@ function getAppJS() {
               });
   
               if (response.ok) {
-                  console.log('Poll created successfully, loading poll...');
                   userCurrentVotes = [];
                   loadPoll(pollId);
               } else {
@@ -879,8 +837,7 @@ function getAppJS() {
           }
       });
   });
-  
-  // Show user info for debugging
+
   function showUserInfo() {
       const header = document.querySelector('.header');
       const userInfo = document.createElement('div');
@@ -901,15 +858,12 @@ function getAppJS() {
       header.style.position = 'relative';
       header.appendChild(userInfo);
   }
-  
-  // FIXED: Load poll with forced userId
+
   async function loadPoll(pollId) {
       try {
           showLoading();
-          
-          // FORCE send userId in API request
+
           const url = \`/api/get?pollId=\${pollId}&userId=\${encodeURIComponent(currentUserId)}\`;
-          console.log('📥 Loading poll with URL:', url);
           
           const response = await fetch(url);
           const poll = await response.json();
@@ -917,8 +871,7 @@ function getAppJS() {
           if (poll.error) {
               throw new Error(poll.error);
           }
-  
-          console.log('📊 Poll loaded:', poll);
+
           userCurrentVotes = poll.userVotes || [];
           displayPoll(poll);
           connectWebSocket(pollId);
@@ -929,8 +882,7 @@ function getAppJS() {
           hideLoading();
       }
   }
-  
-  // Display poll
+
   function displayPoll(poll) {
       document.getElementById('pollQuestion').textContent = poll.question;
       
@@ -958,8 +910,7 @@ function getAppJS() {
                   <div class="progress-fill" style="width: \${percentage}%"></div>
               </div>
           \`;
-          
-          // Add event listener to vote/unvote button
+
           const actionBtn = optionDiv.querySelector('.vote-btn, .unvote-btn');
           actionBtn.addEventListener('click', function() {
               const option = this.getAttribute('data-option');
@@ -972,35 +923,22 @@ function getAppJS() {
   
       updateStatistics(poll.votes, total);
       createChart(poll.options, poll.votes);
-      
-      console.log('Displaying poll with user votes:', userCurrentVotes);
       document.getElementById('createForm').classList.add('hidden');
       document.getElementById('pollDisplay').classList.remove('hidden');
   }
-  
-  // FIXED: Toggle vote with forced userId
+
   async function toggleVote(option) {
       try {
-          console.log('=== VOTE DEBUG ===');
-          console.log('🆔 Using User ID:', currentUserId);
-          console.log('🗳️ Option:', option);
-          console.log('📋 Current votes:', userCurrentVotes);
-          console.log('🎯 Expected action:', userCurrentVotes.includes(option) ? 'UNVOTE' : 'VOTE');
-          
-          // FORCE send userId from frontend
           const voteData = { 
               option, 
               userId: currentUserId  // Always send our generated userId
           };
-          console.log('📤 Sending:', JSON.stringify(voteData));
           
           const response = await fetch('/api/vote?pollId=' + currentPollId, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(voteData)
           });
-  
-          console.log('Response status:', response.status);
           
           if (!response.ok) {
               const errorText = await response.text();
@@ -1009,54 +947,37 @@ function getAppJS() {
           }
   
           const result = await response.json();
-          console.log('📥 Response:', JSON.stringify(result));
-          console.log('🔄 Action performed:', result.action);
-          console.log('📊 New user votes:', result.userVotes);
-  
-          // Update local state
+
           const oldVotes = [...userCurrentVotes];
           userCurrentVotes = result.userVotes || [];
-          console.log(\`🔄 Local state: [\${oldVotes.join(', ')}] → [\${userCurrentVotes.join(', ')}]\`);
-  
-          // Update UI
+
           updateButtonStates();
           showVoteAnimation(option, result.action);
-          
-          console.log('=== END VOTE DEBUG ===');
   
       } catch (error) {
           console.error('Vote error:', error);
           showError('Failed to vote: ' + error.message);
       }
   }
-  
-  // Update button states based on user's current votes array
+
   function updateButtonStates() {
-      console.log('Updating button states, userCurrentVotes:', userCurrentVotes);
       const optionItems = document.querySelectorAll('.option-item');
       
       optionItems.forEach(item => {
           const option = item.querySelector('.option-text').textContent;
           const button = item.querySelector('.vote-btn, .unvote-btn');
           const isUserVoted = userCurrentVotes.includes(option);
-          
-          console.log(\`Option: \${option}, isUserVoted: \${isUserVoted}\`);
-          
-          // Update button appearance
+
           button.className = isUserVoted ? 'unvote-btn' : 'vote-btn';
           button.textContent = isUserVoted ? 'Unvote' : 'Vote';
-          
-          // Update item appearance
+
           item.className = 'option-item fade-in' + (isUserVoted ? ' user-voted' : '');
       });
   }
-  
-  // Show vote animation
+
   function showVoteAnimation(option, action) {
       const button = document.querySelector(\`[data-option="\${option}"]\`);
       if (button) {
-          console.log(\`🎬 Animation: \${option} → \${action}\`);
-          
           switch (action) {
               case 'vote':
                   button.textContent = 'Voted!';
@@ -1074,35 +995,24 @@ function getAppJS() {
           }, 1500);
       }
   }
-  
-  // FIXED: Connect WebSocket with forced userId
+
   function connectWebSocket(pollId) {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      
-      // FORCE send userId in WebSocket URL
       const wsUrl = \`\${protocol}//\${window.location.host}/ws/\${pollId}?userId=\${encodeURIComponent(currentUserId)}\`;
-      
-      console.log('🔌 WebSocket URL:', wsUrl);
+
       websocket = new WebSocket(wsUrl);
       
       websocket.onopen = function() {
-          console.log('✅ WebSocket connected');
           activeUsers++;
           updateActiveUsers();
       };
       
       websocket.onmessage = function(event) {
-          console.log('WebSocket message received:', event.data);
           const data = JSON.parse(event.data);
           
           if (data.type === 'vote_update') {
-              console.log('🗳️ Vote update from:', data.voterId);
-              console.log('🆔 Our user ID:', currentUserId);
-              console.log('🔍 Vote update data:', data);
-              
-              // Only update our votes if it's from our user
+
               if (data.voterId === currentUserId) {
-                  console.log('🔄 Updating our votes from WebSocket:', data.userVotes);
                   userCurrentVotes = data.userVotes || [];
                   updateButtonStates();
               } else {
@@ -1114,9 +1024,7 @@ function getAppJS() {
               updateChart(data.votes);
               
           } else if (data.type === 'poll_data') {
-              console.log('📊 Poll data received:', data);
-              
-              // Set user's current votes from server
+
               userCurrentVotes = data.userVotes || [];
               
               displayPoll({
@@ -1137,11 +1045,9 @@ function getAppJS() {
       };
   
       websocket.onclose = function() {
-          console.log('WebSocket connection closed');
           activeUsers = Math.max(0, activeUsers - 1);
           updateActiveUsers();
-          
-          // Try to reconnect after 3 seconds
+
           setTimeout(() => {
               if (currentPollId) {
                   connectWebSocket(currentPollId);
@@ -1149,8 +1055,7 @@ function getAppJS() {
           }, 3000);
       };
   }
-  
-  // Update votes display
+
   function updateVotes(votes, total) {
       const optionsContainer = document.getElementById('pollOptions');
       const optionItems = optionsContainer.querySelectorAll('.option-item');
@@ -1166,19 +1071,16 @@ function getAppJS() {
   
       document.getElementById('totalVotes').textContent = total;
   }
-  
-  // Update statistics
+
   function updateStatistics(votes, total) {
       document.getElementById('totalVotes').textContent = total;
       updateActiveUsers();
   }
-  
-  // Update active users
+
   function updateActiveUsers() {
       document.getElementById('activeUsers').textContent = activeUsers;
   }
-  
-  // Create chart with proper cleanup
+
   function createChart(options, votes) {
       // Destroy existing chart if exists
       if (resultsChart) {
@@ -1235,8 +1137,7 @@ function getAppJS() {
           }
       });
   }
-  
-  // Update chart
+
   function updateChart(votes) {
       if (resultsChart) {
           const options = resultsChart.data.labels;
@@ -1244,14 +1145,12 @@ function getAppJS() {
           resultsChart.update('active');
       }
   }
-  
-  // Update poll link
+
   function updatePollLink(pollId) {
       const pollLink = window.location.origin + '/?poll=' + pollId;
       document.getElementById('pollLink').textContent = pollLink;
   }
-  
-  // Copy poll link
+
   function copyPollLink() {
       const pollLink = document.getElementById('pollLink').textContent;
       navigator.clipboard.writeText(pollLink).then(() => {
@@ -1284,26 +1183,22 @@ function getAppJS() {
       document.getElementById('pollDisplay').classList.add('hidden');
       document.getElementById('createForm').classList.add('hidden');
   }
-  
-  // Hide loading
+
   function hideLoading() {
       document.getElementById('loading').classList.add('hidden');
   }
-  
-  // Show error
+
   function showError(message) {
       const errorDiv = document.getElementById('error');
       errorDiv.textContent = message;
       errorDiv.classList.remove('hidden');
       hideLoading();
   }
-  
-  // Hide error
+
   function hideError() {
       document.getElementById('error').classList.add('hidden');
   }
-  
-  // Check if URL has poll ID
+
   window.addEventListener('load', function() {
       debugLog('Page loaded, checking for poll ID...');
       const urlParams = new URLSearchParams(window.location.search);
@@ -1317,8 +1212,7 @@ function getAppJS() {
           debugLog('No poll ID in URL, ready to create new poll');
       }
   });
-  
-  // Track votes for analytics
+
   function trackVote(option, action) {
       console.log('Vote tracked:', { option, action, userId: currentUserId });
   }`;

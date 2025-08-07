@@ -129,7 +129,7 @@ npm install -D wrangler
 ```bash
 # 1. Tạo KV namespace cho metadata
 npx wrangler kv namespace create "POLLS_KV"
-npx wrangler kv namespace create "POLLS_KV" --previewß
+npx wrangler kv namespace create "POLLS_KV" --preview
 
 # 2. Lưu lại ID được trả về
 # Ví dụ: 646885645fe84edc83137e1f25584f9e
