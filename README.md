@@ -129,8 +129,8 @@ npm install -D wrangler
 
 ```bash
 # 1. Tạo KV namespace cho metadata
-wrangler kv:namespace create "POLLS_KV"
-wrangler kv:namespace create "POLLS_KV" --preview
+npx wrangler kv namespace create "POLLS_KV"
+npx wrangler kv namespace create "POLLS_KV" --previewß
 
 # 2. Lưu lại ID được trả về
 # Ví dụ: 646885645fe84edc83137e1f25584f9e
@@ -196,7 +196,7 @@ npx wrangler deploy
 // Main entry point
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
+    const url = new URL(request.url);ßßß
     const path = url.pathname;
     
     // Route requests
