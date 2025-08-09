@@ -9,7 +9,7 @@ bindings = [
 
 [[migrations]]
 tag = "v1"
-new_sqllite_classes = ["Poll"]
+new_sqlite_classes = ["Poll"]
 
 # Thay ID này bằng ID thực từ output của wrangler kv namespace create
 [[kv_namespaces]]
